@@ -136,32 +136,12 @@ export default function Home() {
                 map(metaData, (data) => (
                  console.log(data)
 
-                 // Check if data is an object
-                 // if it is map over data 
-                 // else show data
-
-                 // Look into flattening the object, or
-                 // create a recursize function that pulls the data.
-                 
+                //  https://www.geeksforgeeks.org/flatten-javascript-objects-into-a-single-depth-object/
                  // The solution will require some type of recursion
                  // Look through each obj to see if it is worth building
                  // or if just writing everything in manually is worth doing
-
-                 // Multiple obj would benefit from the function being created
                  
                 ))
-                // metaData 
-                // What are my options?
-                // 1. Write each item manually
-
-                // 2. Write a function that will create table
-                // and show each of the values one at a time. 
-
-                // 3. Write a function that shows a tree shape 
-                // for each of the values. 
-
-                // Creating helper functions allows for 
-                // more versitile builds
               }
             </div>
 
