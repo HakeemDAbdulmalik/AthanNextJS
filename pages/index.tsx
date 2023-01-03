@@ -3,7 +3,7 @@ import Image from 'next/image'
 import { Inter } from '@next/font/google'
 import styles from '../styles/Home.module.css'
 import { DropDownOption } from '../components/dropdownoption'
-import { submitForm, displayMeta } from '../components/submitForm'
+import { submitForm, displayMeta, displayCalendar } from '../components/submitForm'
 import React, { useState, useEffect } from 'react'
 import { constants } from 'fs/promises'
 import { executionAsyncId } from 'async_hooks'
@@ -25,7 +25,7 @@ function onChangeHandler (e:any , updateState:any) {
 }
 
 export default function Home() {
-  const [methodValue, setMethodValue] = useState("2");
+  const [methodValue, setMethodValue] = useState(2);
   const [city, setCity] = useState("NewYork");
   const [country, setCountry] = useState("US");
   const [state, setState] = useState("NY");
@@ -36,17 +36,17 @@ export default function Home() {
   const [callRes, setCallRes]: any = useState([]);
 
 
-  const [metaData, setMetaData] = useState([]);
+  const [metaData, setMetaData] = useState({});
   // const [] = useState(" ");
 
-  function submitClicked(event) {
-    event?.preventDefault();
-    submitForm({city, country, state, month, year, annual, iso8601})
+  function submitClicked(event:React.ChangeEvent<HTMLInputElement>) {
+    event.preventDefault();
+    submitForm({city, country, state, month, year, annual, iso8601, methodValue}, {})
     .then(data => {
       setCallRes(data);
     })
     .catch(error => {
-      console.log('submoitClicked did not work');
+      console.log('submitClicked did not work');
       
     });
   }
@@ -55,13 +55,14 @@ export default function Home() {
     if (callRes[0] !== undefined) {
 
       displayMeta(callRes[0], setMetaData);
+      displayCalendar(callRes);
     }
   }, [callRes]);
 
   useEffect(() => {
-    console.log("This is metaData", metaData);
+    console.log("This is callRes[0]", callRes[0]);
     
-  }, [metaData])
+  }, [metaData]);
   
   const methods = {
     optionName: "method",
@@ -133,28 +134,38 @@ export default function Home() {
           <div>
             <div> 
               {
-                map(metaData, (data) => (
-                 console.log(data)
-
-                //  https://www.geeksforgeeks.org/flatten-javascript-objects-into-a-single-depth-object/
-                 // The solution will require some type of recursion
-                 // Look through each obj to see if it is worth building
-                 // or if just writing everything in manually is worth doing
-                 
+                map(metaData, (data: string, key) => (
+                  <>
+                    <p>
+                      {key}
+                    </p>
+                    <p>
+                      {data}
+                    </p><br/>
+                  </>
                 ))
               }
             </div>
 
             {
-              
               callRes.map((data: any, index: number) => (
                 // display all of the data that gets updated
                 // all other data should be displayed chronologically
-                <p key={index}>
-                 {
-                  JSON.stringify(data)
-                 }
-                </p>
+                <>
+                
+                  <h3>Prayer times</h3>
+                  {
+                    map(data.timings, (time, timeName) => (
+                      <>
+                        <p>{timeName}</p>
+                        <p>{time}</p><br/>
+                      </>
+                    ))
+                  }
+                  <p key={index}>
+                    
+                  </p>
+                </>
               ))
             }
           </div>

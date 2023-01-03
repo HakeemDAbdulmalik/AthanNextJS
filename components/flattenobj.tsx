@@ -1,25 +1,28 @@
-// create a function that can flatten objects
+export const flattenObj = (ob: {}) => {
 
-export function flattenObj(obj: object) {
-    let flatObj = {};
-    let objNames: string[] = Object.keys(obj);
-    return  new Promise((resolve, reject) => {
-        
-        resolve(flatObj);
-        reject("Could not flatten the object.");
-    });
-    // Make the function asynchronos ✔
-    
-    // Create an empty obj ✔
-    // Create an array from the objects name and length
+	// The object which contains the
+	// final result
+	let result = {};
 
-    // Create a loop to go through the new array
-        // Check if the current object is an array or object
-            // if true use the naming convention . ie: obj.smallerobj
-            // if array use a num as the ending instead of a name. ie: obj.innerArray.0, obj.innerArray.1, obj.innerArray.2
-            // Use recurisive function to go through each of the items
-        // Add the current item to the obj
-    
-    // return the flattened obj
+	// loop through the object "ob"
+	for (const i in ob) {
 
-}
+		// We check the type of the i using
+		// typeof() function and recursively
+		// call the function again
+		if ((typeof ob[i as keyof typeof ob]) === 'object' && !Array.isArray(ob[i as keyof typeof ob])) {
+			const temp = flattenObj(ob[i as keyof typeof ob]);
+			for (const j in temp) {
+
+				// Store temp in result
+				result[i + '.' + j as keyof typeof ob] = temp[j as keyof typeof temp];
+			}
+		}
+
+		// Else store ob[i] in result directly
+		else {
+			result[i as keyof typeof result] = ob[i as keyof typeof ob];
+		}
+	}
+	return result;
+};
